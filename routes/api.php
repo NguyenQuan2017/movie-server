@@ -26,6 +26,8 @@ Route::group([
         Route::Resource('category','Admin\CategoryController');
         Route::Resource('genre','Admin\GenreController');
         Route::Resource('film','Admin\FilmController');
+        Route::Resource('image', 'Admin\ImageController');
+        Route::Resource('information', 'Admin\InformationController');
 //        Route::put('testUpdate/{id}', 'Admin\UserController@testUpdate');
         Route::group(['prefix' => 'history'], function() {
             Route::group(['prefix' => 'user'], function() {
@@ -44,6 +46,24 @@ Route::group([
                 Route::get('list', 'Admin\HistoryController@getListGenreRemove');
                 Route::put('restore/{genre}', 'Admin\HistoryController@restoreGenre');
                 Route::delete('delete/{genre}', 'Admin\HistoryController@forceDeleteGenre');
+            });
+
+            Route::group(['prefix' => 'film'], function () {
+                Route::get('list', 'Admin\HistoryController@getListFilmRemove');
+                Route::put('restore/{film}', 'Admin\HistoryController@restoreFilm');
+                Route::delete('delete/{genre}', 'Admin\HistoryController@deleteFilm');
+            });
+
+            Route::group(['prefix' => 'image'], function() {
+                Route::get('list', 'Admin\HistoryController@getListImageOnTrashed');
+                Route::put('restore/{film}', 'Admin\HistoryController@restoreImage');
+                Route::delete('delete/{film}', 'Admin\HistoryController@forceDeleteImage');
+            });
+
+            Route::group(['prefix' => 'information'], function() {
+                Route::get('list', 'Admin\HistoryController@getListInformationInTrashed');
+                Route::put('restore/{information}', 'Admin\HistoryController@restoreInformation');
+                Route::delete('delete/{information}', 'Admin\HistoryController@forceDeleteInformation');
             });
 
         });

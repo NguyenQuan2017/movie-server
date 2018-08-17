@@ -47,9 +47,9 @@ class FilmController extends Controller
         $file = $request->input('image');
         $file = decodeImageBase64($file);
         $data = $file['data'];
-        $path = "uploads/films";
+        $path = "uploads/films/" .date('Ymd');
         $extension = $file['extension'];
-        $file_name = slugify($film_name_el) . '-' .time(). '.' . $extension;
+        $file_name = date('Ymd') . '-' .time()*1000 . '-' . \faker()->uuid. '-' . slugify($film_name_el) . '.' . $extension;
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
@@ -59,7 +59,7 @@ class FilmController extends Controller
         $film = Film::create([
             'film_name' => $film_name,
             'film_name_el' => $film_name_el,
-            'slug' => $film_name,
+            'slug' => slugify($film_name),
             'description' => $description
         ]);
 
@@ -105,7 +105,21 @@ class FilmController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $film_name = $request->input('filmName');
+        $film_name_el = $request->input('filmNameEl');
+        $description = $request->input('description');
+        $film = Film::findOrFail($id);
+
+        $film->update([
+            'film_name' => $film_name,
+            'film_name_el' => $film_name_el,
+            'slug' => slugify($film_name),
+            'description' => $description
+        ]);
+
+        return response_success([
+            'film' => $film
+        ],'update film success');
     }
 
     /**
@@ -116,6 +130,15 @@ class FilmController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $film = Film::findOrFail($id);
+
+        if ($film) {
+            $film->image->delete();
+            $film->delete();
+            return response_success([
+                'film' => $film
+            ],'deleted film id' . $id);
+        }
+        return response_error([],'film id not found');
     }
 }

@@ -27,6 +27,12 @@
         );
     }
 
+    function faker() {
+        $faker = \Faker\Factory::create();
+
+        return $faker;
+    }
+
     function imageDirectory()
     {
         $path = 'public/images/';

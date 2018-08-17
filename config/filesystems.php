@@ -54,14 +54,7 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
-        'public_uploads' => [
-            'driver' => 'local',
-            'root' => public_path(). '/uploads'
-        ],
-        'storage' => [ // used for Backpack/LogManager
-            'driver' => 'local',
-            'root'   => storage_path(),
-        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
