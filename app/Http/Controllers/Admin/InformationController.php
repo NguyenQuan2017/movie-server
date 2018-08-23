@@ -14,7 +14,9 @@ class InformationController extends Controller
      */
     public function index()
     {
-        $informations = FilmInformation::with('film')->get();
+        $informations = FilmInformation::with('film')
+            ->orderByDesc('id')
+            ->get();
 
         return response_success([
             'informations' => $informations

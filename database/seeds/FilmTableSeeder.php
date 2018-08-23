@@ -20,7 +20,8 @@ class FilmTableSeeder extends Seeder
                 'film_name' => $faker->sentence(3),
                 'film_name_el' => $faker->sentence(3),
                 'slug' => $faker->slug,
-                'description' => $faker->paragraph(10)
+                'description' => $faker->paragraph(10),
+                'view' => $faker->numberBetween(1000,200000),
             ]);
         }
     }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoryFilmTable extends Migration
+class CreateActorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateCategoryFilmTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_film', function (Blueprint $table) {
+        Schema::create('actors', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->integer('film_id')->unsigned();
-            $table->foreign('film_id')->references('id')->on('films')->onDelete('cascade');
+            $table->string('actor_name');
+            $table->string('slug');
+            $table->string('gender');
+            $table->string('country')->nullable();
+            $table->date('birth_day')->nullable();
+            $table->string('image');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +33,6 @@ class CreateCategoryFilmTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_film');
+        Schema::dropIfExists('actors');
     }
 }

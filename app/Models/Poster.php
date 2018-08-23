@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class FilmInformation extends Model
+class Poster extends Model
 {
     use SoftDeletes;
 
-    protected  $table = 'film_information';
+    protected $table = 'posters';
+    protected $fillable = ['poster_name', 'slug', 'link', 'film_id'];
 
-    protected $fillable = ['content','year','episode_number','high_definition','film_id'];
 
     public function film()
     {

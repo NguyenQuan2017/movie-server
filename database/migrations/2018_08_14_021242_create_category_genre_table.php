@@ -16,7 +16,9 @@ class CreateCategoryGenreTable extends Migration
         Schema::create('category_genre', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->integer('genre_id')->unsigned();
+            $table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade');
             $table->timestamps();
         });
     }

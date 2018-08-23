@@ -166,7 +166,6 @@ class HistoryController extends Controller
 
         if ($film) {
             $film->restore();
-
             return response_success([
                 'film' => $film
             ],'restored film id ' . $id);
@@ -179,11 +178,9 @@ class HistoryController extends Controller
      * force delete film
      * api/admin/history/film/delete/{id} | delete
      */
-    public function deleteFilm ($id) {
+    public function deleteFilm($id) {
         $film = Film::withTrashed()->findOrFail($id);
-
         if ($film) {
-            $film->image->forceDelete();
             $film->forceDelete();
             return response_success([
                 'film' => $film
@@ -249,7 +246,7 @@ class HistoryController extends Controller
         $informations = FilmInformation::onlyTrashed()->with('film')->get();
 
         return response_success([
-            'php a' => $informations
+            'history_informations' => $informations
         ],'get information success');
     }
 
@@ -258,7 +255,8 @@ class HistoryController extends Controller
      * api/admin/history/information/restore/{id} | put
      */
     public function restoreInformation($id) {
-        $information = FilmInformation::findOrFail($id);
+
+        $information = FilmInformation::withTrashed()->findOrFail($id);
         if ($information) {
             $information->restore();
 
@@ -274,10 +272,9 @@ class HistoryController extends Controller
      * api/admin/history/information/delete/{id} | delete
      */
     public function forceDeleteInformation($id) {
-        $information = FilmInformation::findOrFail($id);
+        $information = FilmInformation::withTrashed()->findOrFail($id);
         if($information) {
             $information->forceDelete();
-
             return response_success([
                 'information' => $information
             ],'delete information id' . $id);

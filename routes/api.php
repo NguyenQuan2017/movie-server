@@ -28,6 +28,8 @@ Route::group([
         Route::Resource('film','Admin\FilmController');
         Route::Resource('image', 'Admin\ImageController');
         Route::Resource('information', 'Admin\InformationController');
+        Route::Resource('poster', 'Admin\PosterController');
+        Route::Resource('actor','Admin\ActorController');
 //        Route::put('testUpdate/{id}', 'Admin\UserController@testUpdate');
         Route::group(['prefix' => 'history'], function() {
             Route::group(['prefix' => 'user'], function() {
@@ -67,15 +69,25 @@ Route::group([
             });
 
         });
-
-//        Route::apiResource('category', 'CategoryController');
-//        Route::apiResource('article', 'ArticleController');
         Route::post('logout', 'AuthController@logout');
     });
-//    Route::group([
-//        'prefix' => 'public'
-//    ], function () {
-//        Route::apiResource('category', 'CategoryController');
-//        Route::apiResource('article', 'ArticleController');
-//    });
+});
+
+Route::group([
+    'prefix' => 'public'
+], function () {
+    Route::get('category','Client\CategoryController@getCategories')->name('category.list');
+    Route::group(['prefix' => 'film'], function() {
+       Route::get('highlight', 'Client\FilmController@getHighLightFilm');
+       Route::get('highlight/first', 'Client\FilmController@getHighLightFilmFirst');
+       Route::get('information/{slug}', 'Client\FilmController@getInformationFilm');
+       Route::get('related/{slug}','Client\FilmController@getRelatedFilm');
+       Route::group(['prefix' => 'phim-le'], function() {
+           Route::get('newest', 'Client\FilmController@getNewestFilm');
+       });
+
+       Route::group(['prefix' => 'phim-chieu-rap'], function() {
+           Route::get('newest', 'Client\FilmController@getNewestTheaterFilm');
+       });
+    });
 });

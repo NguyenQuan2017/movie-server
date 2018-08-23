@@ -32,4 +32,17 @@ class Film extends Model
     {
         return $this->hasOne(Image::class);
     }
+
+    public function poster()
+    {
+        return $this->hasOne(Poster::class);
+    }
+
+    public function actors()
+    {
+        return $this->belongsToMany(Actor::class);
+    }
+
+
+
 }

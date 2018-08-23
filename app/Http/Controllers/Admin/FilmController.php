@@ -16,7 +16,7 @@ class FilmController extends Controller
      */
     public function index()
     {
-        $films = Film::with('image')->orderByDesc('id')->paginate(10);
+        $films = Film::with('image','categories','genres')->orderByDesc('id')->paginate(10);
 
         return response_success([
             'films' => $films
@@ -54,14 +54,33 @@ class FilmController extends Controller
             mkdir($path, 0777, true);
         }
         Storage::disk('public')->put($path . '/' .$file_name, $data);
-        $imagePath = Storage::url( 'uploads/films/'.$file_name);
+        $imagePath = Storage::url('uploads/films/'. date('Ymd'). '/'.$file_name);
         $imageFullPath = 'http://movieserver.localhost:8081' . $imagePath;
+        $categories = $request->input('category');
+        $genres = $request->input('genre');
+        $actors = $request->input('actor');
         $film = Film::create([
             'film_name' => $film_name,
             'film_name_el' => $film_name_el,
             'slug' => slugify($film_name),
-            'description' => $description
+            'description' => $description,
+            'view' => 0
         ]);
+
+        //attach id category
+        foreach ($categories as $category) {
+            $film->categories()->attach($category);
+        }
+
+        //attach id genre
+        foreach ($genres as $genre) {
+            $film->genres()->attach($genre);
+        }
+
+        //attach id actor
+        foreach($actors as $actor) {
+            $film->actors()->attach($actor);
+        }
 
         $image = new Image();
         $image->image_name = $film_name_el;
@@ -97,17 +116,17 @@ class FilmController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * update film by id
+     * api/admin/film/{id} | put
      */
     public function update(Request $request, $id)
     {
         $film_name = $request->input('filmName');
         $film_name_el = $request->input('filmNameEl');
         $description = $request->input('description');
+        $categories = $request->input('category');
+        $genres = $request->input('genre');
+        $actors = $request->input('actor');
         $film = Film::findOrFail($id);
 
         $film->update([
@@ -116,6 +135,15 @@ class FilmController extends Controller
             'slug' => slugify($film_name),
             'description' => $description
         ]);
+
+        //sync id category
+        $film->categories()->sync($categories);
+
+        //sync id genre
+        $film->genres()->sync($genres);
+
+        //sync id actor
+        $film->actors()->sync($actors);
 
         return response_success([
             'film' => $film
@@ -133,6 +161,7 @@ class FilmController extends Controller
         $film = Film::findOrFail($id);
 
         if ($film) {
+//            $film->filmInformation->delete() ? $film->filmInformation->delete() : null;
             $film->image->delete();
             $film->delete();
             return response_success([

@@ -17,7 +17,9 @@ class ImageController extends Controller
      */
     public function index()
     {
-        $images = Image::with('film')->get();
+        $images = Image::with('film')
+            ->orderByDesc('id')
+            ->get();
 
         return response_success([
             'images' => $images
