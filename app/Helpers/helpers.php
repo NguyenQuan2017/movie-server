@@ -47,13 +47,16 @@
         @list($type, $file_data) = explode(';', $file);
         @list(, $file_data) = explode(',', $file_data);
         $type_explode = explode("/", $type);
-        $extension = $type_explode[1];
-        $data = base64_decode($file_data);
-        return collect([
-            'type' => $type,
-            'data' => $data,
-            'extension' => $extension
-        ]);
+        try{
+            $extension = $type_explode[1];
+            $data = base64_decode($file_data);
+            return collect([
+                'type' => $type,
+                'data' => $data,
+                'extension' => $extension
+            ]);
+        }catch (Exception $e){}
+
     }
 
     function convertStringToArray($str) {
@@ -80,4 +83,32 @@
         // Revert back to the old locale
         setlocale(LC_ALL, $oldLocale);
         return $clean;
+    }
+
+    function getFileTypeVideo($url){
+        if (preg_match('/^.*\.(mp4|mov|mpg|mpeg|wmv|mkv)$/i', $url, $mine))
+        {
+            switch ($mine[1])
+            {
+                case 'mp4' :
+                    $type = 'video/mp4';
+                    break;
+                case 'mov':
+                    $type = 'video/mov';
+                    break;
+                case 'mpg':
+                    $type = 'video/mpg';
+                    break;
+                case 'mpeg':
+                    $type = 'video/mpeg';
+                    break;
+                case 'wmv':
+                    $type = 'video/wmv';
+                    break;
+                case 'mkv':
+                    $type = 'video/mkv';
+                    break;
+            }
+            return $type;
+        }
     }

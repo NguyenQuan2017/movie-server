@@ -70,7 +70,16 @@ class FilmController extends Controller
         return response_success([
             'related' => $related
         ]);
+    }
 
+    public function getVideoFilm($slug) {
+        $film = Film::with('videos')
+            ->where('slug', $slug)
+            ->first();
+
+        return response_success([
+            'film' =>$film
+        ]);
     }
 
     //Phim bo

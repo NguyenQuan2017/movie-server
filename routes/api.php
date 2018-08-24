@@ -30,6 +30,7 @@ Route::group([
         Route::Resource('information', 'Admin\InformationController');
         Route::Resource('poster', 'Admin\PosterController');
         Route::Resource('actor','Admin\ActorController');
+        Route::Resource('video','Admin\VideoController');
 //        Route::put('testUpdate/{id}', 'Admin\UserController@testUpdate');
         Route::group(['prefix' => 'history'], function() {
             Route::group(['prefix' => 'user'], function() {
@@ -82,6 +83,7 @@ Route::group([
        Route::get('highlight/first', 'Client\FilmController@getHighLightFilmFirst');
        Route::get('information/{slug}', 'Client\FilmController@getInformationFilm');
        Route::get('related/{slug}','Client\FilmController@getRelatedFilm');
+       Route::get('video/{slug}', 'Client\FilmController@getVideoFilm');
        Route::group(['prefix' => 'phim-le'], function() {
            Route::get('newest', 'Client\FilmController@getNewestFilm');
        });

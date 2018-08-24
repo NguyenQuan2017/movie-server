@@ -43,6 +43,9 @@ class Film extends Model
         return $this->belongsToMany(Actor::class);
     }
 
-
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
 
 }
