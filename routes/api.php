@@ -31,6 +31,7 @@ Route::group([
         Route::Resource('poster', 'Admin\PosterController');
         Route::Resource('actor','Admin\ActorController');
         Route::Resource('video','Admin\VideoController');
+        Route::post('video/get-link', 'Admin\VideoController@getLink');
 //        Route::put('testUpdate/{id}', 'Admin\UserController@testUpdate');
         Route::group(['prefix' => 'history'], function() {
             Route::group(['prefix' => 'user'], function() {

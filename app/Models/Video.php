@@ -11,8 +11,10 @@ class Video extends Model
 
     protected $table = 'videos';
 
-    protected $fillable = ['title', 'link_video','link_trailer', 'episode', 'type', 'film_id','poster'];
-
+    protected $fillable = ['title', 'sources', 'link', 'trailer', 'episode', 'film_id','poster'];
+    protected $casts = [
+        'sources' => 'json'
+    ];
     public function film()
     {
         return $this->belongsTo(Film::class);

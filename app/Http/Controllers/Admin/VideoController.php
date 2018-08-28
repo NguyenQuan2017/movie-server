@@ -39,12 +39,11 @@ class VideoController extends Controller
     public function store(Request $request)
     {
         $title = $request->input('title');
-        $link_video = $request->input('link_video');
         $link_trailer = $request->input('link_trailer');
         $episode = $request->input('episodeNumber');
         $film_id = $request->input('filmName');
         $file = $request->input('image');
-        $type = getFileTypeVideo($link_video);
+//        $type = getFileTypeVideo($link_video);
         $file = decodeImageBase64($file);
         $data = $file['data'];
         $imageFullPath = '';
@@ -60,13 +59,15 @@ class VideoController extends Controller
             $imageFullPath = 'http://movieserver.localhost:8081' . $imagePath;
 
         }
+        $link = $request->input('link_video');
+        $sources = getPhotoGoogle($link);
         $video = Video::create([
             'title' => $title,
-            'link_video' => $link_video,
-            'link_trailer' =>$link_trailer,
+            'sources' => $sources,
+            'link' => $link,
+            'trailer' =>$link_trailer,
             'episode' => $episode,
             'film_id' => $film_id,
-            'type' => $type,
             'poster' => $imageFullPath
         ]);
         return response_success([
@@ -98,15 +99,52 @@ class VideoController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * update video
+     * api/admin/video/{id} | put
      */
     public function update(Request $request, $id)
     {
-        //
+        $title = $request->input('title');
+        $link_trailer = $request->input('link_trailer');
+        $episode = $request->input('episodeNumber');
+        $film_id = $request->input('filmName');
+        $file = $request->input('image');
+//        $type = getFileTypeVideo($link_video);
+        $file = decodeImageBase64($file);
+        $data = $file['data'];
+        $imageFullPath = '';
+        if ($data) {
+            $path = "uploads/films/videos/poster/" . date('Ymd');
+            $extension = $file['extension'];
+            $file_name = date('Ymd') . '-' . time() * 1000 . '-' . \faker()->uuid . '-' . slugify($title) . '.' . $extension;
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+            Storage::disk('public')->put($path . '/' . $file_name, $data);
+            $imagePath = Storage::url('uploads/films/videos/poster/' . date('Ymd') . '/' . $file_name);
+            $imageFullPath = 'http://movieserver.localhost:8081' . $imagePath;
+        }
+        $link = $request->input('link_video');
+        $sources = getPhotoGoogle($link);
+        $video = Video::findOrFail($id);
+
+        if ($video) {
+            $video->update([
+                'title' => $title,
+                'link' => $link,
+                'sources' => $sources,
+                'trailer' =>$link_trailer,
+                'episode' => $episode,
+                'film_id' => $film_id,
+                'poster' => $imageFullPath
+            ]);
+
+            return response_success([
+                'video' => $video
+            ],'updated data success');
+        }
+
+        return response_error([],'video is not found');
     }
 
     /**
@@ -118,5 +156,13 @@ class VideoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getLink(Request $request) {
+        $url = $request->input('link_video');
+        $sources = getPhotoGoogle($url);
+        return response_success([
+            'sources' => $sources
+        ]);
     }
 }
