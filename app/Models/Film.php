@@ -11,7 +11,7 @@ class Film extends Model
 
     protected $table = 'films';
 
-    protected $fillable = ['film_name','film_name_el','slug','description'];
+    protected $fillable = ['film_name','film_name_el','slug','description','no_episode'];
 
     public function categories()
     {
@@ -46,6 +46,11 @@ class Film extends Model
     public function videos()
     {
         return $this->hasMany(Video::class);
+    }
+
+    public function countries()
+    {
+        return $this->belongsToMany(Country::class);
     }
 
 }

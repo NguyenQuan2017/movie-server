@@ -16,7 +16,7 @@ class FilmController extends Controller
      */
     public function index()
     {
-        $films = Film::with('image','categories','genres')->orderByDesc('id')->paginate(10);
+        $films = Film::with('image','categories','genres','countries')->orderByDesc('id')->paginate(10);
 
         return response_success([
             'films' => $films
@@ -44,6 +44,7 @@ class FilmController extends Controller
         $film_name = $request->input('filmName');
         $film_name_el = $request->input('filmNameEl');
         $description = $request->input('description');
+        $no_episode = $request->input('episodeNumber');
         $file = $request->input('image');
         $file = decodeImageBase64($file);
         $data = $file['data'];
@@ -59,11 +60,13 @@ class FilmController extends Controller
         $categories = $request->input('category');
         $genres = $request->input('genre');
         $actors = $request->input('actor');
+        $countries = $request->input('country');
         $film = Film::create([
             'film_name' => $film_name,
             'film_name_el' => $film_name_el,
             'slug' => slugify($film_name),
             'description' => $description,
+            'no_episode' => $no_episode,
             'view' => 0
         ]);
 
@@ -80,6 +83,11 @@ class FilmController extends Controller
         //attach id actor
         foreach($actors as $actor) {
             $film->actors()->attach($actor);
+        }
+
+        //attach id country
+        foreach ($countries as $country) {
+            $film->countries()->attach($country);
         }
 
         $image = new Image();
@@ -124,16 +132,19 @@ class FilmController extends Controller
         $film_name = $request->input('filmName');
         $film_name_el = $request->input('filmNameEl');
         $description = $request->input('description');
+        $no_episode = $request->input('episodeNumber');
         $categories = $request->input('category');
         $genres = $request->input('genre');
         $actors = $request->input('actor');
+        $countries = $request->input('country');
         $film = Film::findOrFail($id);
 
         $film->update([
             'film_name' => $film_name,
             'film_name_el' => $film_name_el,
             'slug' => slugify($film_name),
-            'description' => $description
+            'description' => $description,
+            'no_episode' => $no_episode
         ]);
 
         //sync id category
@@ -144,6 +155,9 @@ class FilmController extends Controller
 
         //sync id actor
         $film->actors()->sync($actors);
+
+        //sync id country
+        $film->countries()->sync($countries);
 
         return response_success([
             'film' => $film
