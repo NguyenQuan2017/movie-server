@@ -39,7 +39,6 @@ class VideoController extends Controller
     public function store(Request $request)
     {
         $title = $request->input('title');
-        $link_trailer = $request->input('link_trailer');
         $episode = $request->input('episodeNumber');
         $film_id = $request->input('filmName');
         $file = $request->input('image');
@@ -65,7 +64,6 @@ class VideoController extends Controller
             'title' => $title,
             'sources' => $sources,
             'link' => $link,
-            'trailer' =>$link_trailer,
             'episode' => $episode,
             'film_id' => $film_id,
             'poster' => $imageFullPath
@@ -105,7 +103,6 @@ class VideoController extends Controller
     public function update(Request $request, $id)
     {
         $title = $request->input('title');
-        $link_trailer = $request->input('link_trailer');
         $episode = $request->input('episodeNumber');
         $film_id = $request->input('filmName');
         $file = $request->input('image');
@@ -133,7 +130,6 @@ class VideoController extends Controller
                 'title' => $title,
                 'link' => $link,
                 'sources' => $sources,
-                'trailer' =>$link_trailer,
                 'episode' => $episode,
                 'film_id' => $film_id,
                 'poster' => $imageFullPath

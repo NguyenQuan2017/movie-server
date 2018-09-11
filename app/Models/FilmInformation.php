@@ -11,7 +11,7 @@ class FilmInformation extends Model
 
     protected  $table = 'film_information';
 
-    protected $fillable = ['content','year','episode_number','high_definition','film_id'];
+    protected $fillable = ['content','year','episode_number','high_definition','film_id','trailer','view'];
 
     public function film()
     {

@@ -32,6 +32,7 @@ Route::group([
         Route::Resource('actor','Admin\ActorController');
         Route::Resource('video','Admin\VideoController');
         Route::Resource('country','Admin\CountryController');
+        Route::Resource('tag', 'Admin\TagController');
         Route::post('video/get-link', 'Admin\VideoController@getLink');
 //        Route::put('testUpdate/{id}', 'Admin\UserController@testUpdate');
         Route::group(['prefix' => 'history'], function() {
@@ -86,6 +87,9 @@ Route::group([
        Route::get('information/{slug}', 'Client\FilmController@getInformationFilm');
        Route::get('related/{slug}','Client\FilmController@getRelatedFilm');
        Route::get('video/{slug}', 'Client\FilmController@getVideoFilm');
+       Route::get('the-loai/{cate}/{genre}', 'Client\FilmController@getListMovieByGenre');
+       Route::get('change-to-slug/{name}', 'Client\FilmController@changeToSlug');
+       Route::get('search/{keyword}', 'Client\FilmController@searchMovie');
        Route::group(['prefix' => 'phim-le'], function() {
            Route::get('newest', 'Client\MovieController@getNewestMovie');
            Route::get('highlight', 'Client\MovieController@getHighlightMovie');

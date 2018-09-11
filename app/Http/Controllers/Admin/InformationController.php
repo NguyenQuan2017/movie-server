@@ -43,6 +43,7 @@ class InformationController extends Controller
         $year = $request->input('year');
         $high_definition = $request->input('highDefinition');
         $episode_number = $request->input('episodeNumber');
+        $trailer = $request->input('link_trailer');
         $film_id = $request->input('filmName');
 
         $information = FilmInformation::create([
@@ -50,6 +51,7 @@ class InformationController extends Controller
             'year' => $year,
             'high_definition' => $high_definition,
             'episode_number' => $episode_number,
+            'trailer' => $trailer,
             'film_id' => $film_id
         ]);
         return response_success([
@@ -89,6 +91,7 @@ class InformationController extends Controller
         $year = $request->input('year');
         $high_definition = $request->input('highDefinition');
         $episode_number = $request->input('episodeNumber');
+        $trailer = $request->input('link_trailer');
         $film_id = $request->input('filmName');
 
         $information = FilmInformation::findOrFail($id);
@@ -97,11 +100,12 @@ class InformationController extends Controller
             'year' => $year,
             'high_definition' => $high_definition,
             'episode_number' => $episode_number,
+            'trailer' => $trailer,
             'film_id' => $film_id
         ]);
 
         return response_success([
-            'information' => $information
+            'information' => $request->all()
         ],'updated information id ' . $id);
     }
 

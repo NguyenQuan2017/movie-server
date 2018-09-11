@@ -141,7 +141,7 @@
         $count = count($data);
         $results = [
             [
-                'label' => '',
+                'label' => '1080p',
                 'type' => 'video/mp4',
                 'file' => ''
             ],
@@ -157,7 +157,7 @@
             ]
         ];
 
-        if($count > 7 && $count <= 9) {
+        if($count > 3) {
             $v1080p = $decode.'=m37';
             $v720p = $decode.'=m22';
             $v360p = $decode.'=m18';

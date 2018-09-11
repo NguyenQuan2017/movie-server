@@ -16,7 +16,9 @@ class FilmController extends Controller
      */
     public function index()
     {
-        $films = Film::with('image','categories','genres','countries')->orderByDesc('id')->paginate(10);
+        $films = Film::with('image','categories','genres','countries','tags')
+            ->orderByDesc('id')
+            ->get();
 
         return response_success([
             'films' => $films
@@ -61,6 +63,7 @@ class FilmController extends Controller
         $genres = $request->input('genre');
         $actors = $request->input('actor');
         $countries = $request->input('country');
+        $tags = $request->input('tag');
         $film = Film::create([
             'film_name' => $film_name,
             'film_name_el' => $film_name_el,
@@ -88,6 +91,11 @@ class FilmController extends Controller
         //attach id country
         foreach ($countries as $country) {
             $film->countries()->attach($country);
+        }
+
+        //attach id tag
+        foreach ($tags as $tag) {
+            $film->tags()->attach($tag);
         }
 
         $image = new Image();
@@ -137,6 +145,7 @@ class FilmController extends Controller
         $genres = $request->input('genre');
         $actors = $request->input('actor');
         $countries = $request->input('country');
+        $tags = $request->input('tag');
         $film = Film::findOrFail($id);
 
         $film->update([
@@ -158,6 +167,9 @@ class FilmController extends Controller
 
         //sync id country
         $film->countries()->sync($countries);
+
+        //sync id tag
+        $film->tags()->sync($tags);
 
         return response_success([
             'film' => $film
@@ -184,4 +196,6 @@ class FilmController extends Controller
         }
         return response_error([],'film id not found');
     }
+
+
 }

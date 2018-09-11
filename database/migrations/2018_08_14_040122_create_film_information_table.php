@@ -20,6 +20,7 @@ class CreateFilmInformationTable extends Migration
             $table->string('high_definition');
             $table->string('episode_number');
             $table->double('view')->default(0);
+            $table->string('trailer')->nullable();
             $table->integer('film_id')->unsigned()->unique('film_id');
             $table->foreign('film_id')->references('id')->on('films')->onDelete('cascade');
             $table->timestamps();
